@@ -1,29 +1,42 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset='utf-8' />
-    <title>Display a map</title>
+    <title>FintechSquad Data Visualization</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.2/mapbox-gl.js'></script>
-    <link rel="icon" href="icon.png">
+    <link rel="icon" href="style/icon.png">
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.2/mapbox-gl.css' rel='stylesheet' />
     <style>
-        body { margin:0; padding:0; }
-        #map { position:absolute; top:0; bottom:0; width:100%; }
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
     </style>
+
+
 </head>
+
 <body>
 
-<div id='map'></div>
-<script>
-mapboxgl.accessToken = 'pk.eyJ1IjoidmVyeW4xY2UiLCJhIjoiY2pqaGdtdXRmM2h2cDN2bW1mMXFjcDR5ZCJ9.8yOftdKhiv5q1EFPhBP_Mw';
-var map = new mapboxgl.Map({
-    container: 'map', // container id
-    style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
-    center: [-74.50, 40], // starting position [lng, lat]
-    zoom: 9 // starting zoom
-});
-</script>
+    <div id='map'></div>
 
+<!--     <script type="text/javascript" src="scripts/dataStorage.js"></script>
+    <script type="text/javascript" src="scripts/mapBuilder.js"></script> -->
+    <script type="module">
+        /* import data from './scripts/dataStorage.js'; */
+        import map from './scripts/mapBuilder.js';
+
+        /* console.log(data) */
+    </script>
 </body>
+
 </html>
