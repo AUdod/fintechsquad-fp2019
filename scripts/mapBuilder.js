@@ -1,6 +1,6 @@
 /* import data from './dataStorage.js' */
-import {getTest} from './dataApi.js'
-getTest().then( result => {console.log('getTest', result ); } );
+import {getNew} from './dataApi.js'
+getNew().then( result => {console.log('getTest', result ); } );
 
 
 var mapBuilder = {};
@@ -9,15 +9,32 @@ mapboxgl.accessToken = 'pk.eyJ1IjoidmVyeW4xY2UiLCJhIjoiY2pqaGdtdXRmM2h2cDN2bW1mM
 mapBuilder.map = new mapboxgl.Map({
     container: 'map', // container id
     style: 'mapbox://styles/mapbox/light-v10', // stylesheet location
-    center: [39.727803,
-        43.578774], // starting position [lng, lat]
-    zoom: 15, // starting zoom
-    pitch: 40
+    center: [39.737310716094385,
+        43.586651460188904], // starting position [lng, lat]
+        zoom: 14.7,
+        pitch: 65,
+        bearing: 35
 
 });
 
+mapBuilder.map.on('move', function (e) {
+    /* console.log('map', mapBuilder.map)
+    console.log('e', e) */
+})
+
+function rotateCamera(timestamp) {
+    // clamp the rotation between 0 -360 degrees
+    // Divide timestamp by 100 to slow rotation to ~10 degrees / sec
+    mapBuilder.map.rotateTo((timestamp / 100) % 360, {duration: 0});
+    // Request the next frame of the animation.
+    requestAnimationFrame(rotateCamera);
+    }
+
+
 mapBuilder.map.on('load', function () {
     // Insert the layer beneath any symbol layer.
+    rotateCamera(0);
+
     console.log(mapBuilder)
     var layers = mapBuilder.map.getStyle().layers;
 
@@ -49,10 +66,12 @@ mapBuilder.map.on('load', function () {
         }
     }, labelLayerId);
 
-    getTest().then(result =>  mapBuilder.addLayers(result, "test"));
+    getNew().then(result =>  {mapBuilder.addLayers(result, "test")});
 
 });
 
+
+    
 mapBuilder.addLayers = function(source, moduleName) {
     mapBuilder.map.addSource(moduleName, {
         "type": "geojson",
@@ -81,11 +100,54 @@ mapBuilder.addLayers = function(source, moduleName) {
             // Get fill-extrusion-height from the source 'height' property.
             'fill-extrusion-height': 50,
             // Get fill-extrusion-base from the source 'base_height' property.
-            'fill-extrusion-base': 5,
+            'fill-extrusion-base': 0,
             // Make extrusions slightly opaque for see through indoor walls.
             'fill-extrusion-opacity': 0.7
         }
     });
+
+    mapBuilder.map.addLayer({
+        "id": moduleName+"-labels",
+        "type": "symbol",
+        "source": moduleName,
+        "layout": {
+        "text-field": ["get", "0"],
+        "text-variable-anchor": ["top", "bottom", "left", "right"],
+        "text-radial-offset": 0.5,
+        "text-justify": "auto"
+        }
+        });
+
+        
+    mapBuilder.map.setPaintProperty(moduleName +'-extrusion', 'fill-extrusion-height', [
+        'interpolate',
+        ['linear'],
+        ['number', ['get', '0']],
+        0, 20,
+        5000000, 440
+    ]);
+
+    mapBuilder.map.setPaintProperty(moduleName +'-extrusion', 'fill-extrusion-color', [
+        'interpolate',
+        ['linear'],
+        ['number', ['get', '0']],
+        0, '#2ff211',
+        1700000, '#95f211',
+        3600000, '#c27e11',
+        5000000, '#f21111'
+    ]);
+
+    mapBuilder.map.setPaintProperty(moduleName +'-geom', 'fill-color', [
+        'interpolate',
+        ['linear'],
+        ['number', ['get', '0']],
+        0, '#2ff211',
+        1400000, '#95f211',
+        2800000, '#c27e11',
+        4000000, '#f21111'
+    ]);
+
+
     console.log( this.map.getStyle().sources)
 }
 

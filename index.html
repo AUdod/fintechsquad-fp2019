@@ -8,6 +8,7 @@
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.2/mapbox-gl.js'></script>
     <link rel="icon" href="style/icon.png">
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.2/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" type="text/css" href="styles.css" media="screen" />
     <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-language/v0.10.1/mapbox-gl-language.js'></script>
 
     <style>
@@ -22,6 +23,57 @@
             bottom: 0;
             width: 100%;
         }
+
+        .map-overlay {
+            font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            position: absolute;
+            width: 25%;
+            top: 0;
+            left: 0;
+            padding: 10px;
+        }
+
+        .map-overlay .map-overlay-inner {
+            background-color: #fff;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.20);
+            border-radius: 3px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .map-overlay h2 {
+            line-height: 24px;
+            display: block;
+            margin: 0 0 10px;
+        }
+
+        .map-overlay .legend .bar {
+            height: 10px;
+            width: 100%;
+            background: linear-gradient(to right, #66e100, #FCA107, #b61c0b, #950b09);
+        }
+
+        .map-overlay input {
+            background-color: transparent;
+            display: inline-block;
+            width: 100%;
+            position: relative;
+            margin: 0;
+            cursor: ew-resize;
+        }
+        .bottom {
+            bottom: 20px;
+            display: inline-block;
+        }
+
+        #bar-title {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #bar-title>p {
+            margin: 0;
+        }
     </style>
 
 
@@ -31,6 +83,36 @@
 
     <div id='map'></div>
 
+    <div class='map-overlay top'>
+        <div class='map-overlay-inner'>
+            <!-- <h2>Количество записей по районам (за месяц)</h2> -->
+            <label id='date'></label>
+            <input id='slider' type='range' min='0' max='364' step='1' value='30' />
+        </div>
+        <div class='map-overlay-inner'>
+            <div id='legend' class='legend'>
+                <div class='bar'></div>
+                <div id="bar-title">
+                    <p>1</p>
+                    <p>Денег в банкомате</p>
+                    <p>2100</p>
+                </div>
+
+                
+            </div>
+        
+        </div>
+    </div>
+
+    <div class="map-overlay bottom" id="districtInfo">
+        <div class="map-overlay-inner">
+            <strong id="district-label"> </strong>
+            <p id="district-count-prop"></p>
+            <p>Какая-то другая информация, возможно, графики.</p>
+            <button id="back-button" >Назад</button>
+        </div>
+        
+    </div>
 
     <!-- <script src="lib/everpolate.browserified.min.js"></script> -->
     <script type="module">
