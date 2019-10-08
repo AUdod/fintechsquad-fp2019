@@ -1,9 +1,27 @@
 /* import data from './dataStorage.js' */
-import {getNew} from './dataApi.js'
-getNew().then( result => {console.log('getTest', result ); } );
+import {getNew, getOld} from './dataApi.js'
 
 
 var mapBuilder = {};
+var newDataButton = document.getElementById('newData')
+newDataButton.addEventListener("click", function () {
+    oldDataButton.classList.remove("active")
+    newDataButton.classList.add("active")
+
+    mapBuilder.toggleLayers("new", "old");
+
+        
+})
+var oldDataButton = document.getElementById('oldData')
+oldDataButton.addEventListener("click", function () {
+    newDataButton.classList.remove("active")
+    oldDataButton.classList.add("active")
+
+    mapBuilder.toggleLayers("old", "new");
+
+        
+})
+
 
 mapboxgl.accessToken = 'pk.eyJ1IjoidmVyeW4xY2UiLCJhIjoiY2pqaGdtdXRmM2h2cDN2bW1mMXFjcDR5ZCJ9.8yOftdKhiv5q1EFPhBP_Mw';
 mapBuilder.map = new mapboxgl.Map({
@@ -25,7 +43,7 @@ mapBuilder.map.on('move', function (e) {
 function rotateCamera(timestamp) {
     // clamp the rotation between 0 -360 degrees
     // Divide timestamp by 100 to slow rotation to ~10 degrees / sec
-    mapBuilder.map.rotateTo((timestamp / 100) % 360, {duration: 0});
+    mapBuilder.map.rotateTo((timestamp / 300) % 360, {duration: 0});
     // Request the next frame of the animation.
     requestAnimationFrame(rotateCamera);
     }
@@ -66,7 +84,17 @@ mapBuilder.map.on('load', function () {
         }
     }, labelLayerId);
 
-    getNew().then(result =>  {mapBuilder.addLayers(result, "test")});
+    getNew().then(result =>  {
+        mapBuilder.addLayers(result, "new")
+        mapBuilder.toggleLayers("new", "old");
+    });
+    getOld().then(result =>  {
+        /* mapBuilder.oldSource = result; */
+        mapBuilder.addLayers(result, "old");
+        mapBuilder.toggleLayers("new", "old");
+    });
+
+    /* mapBuilder.toggleLayers("new", "old"); */
 
 });
 
@@ -149,6 +177,19 @@ mapBuilder.addLayers = function(source, moduleName) {
 
 
     console.log( this.map.getStyle().sources)
+}
+
+mapBuilder.toggleLayers = function( addModuleName, delModuleName) {
+
+    mapBuilder.map.setLayoutProperty(addModuleName+'-geom', 'visibility', 'visible');
+    mapBuilder.map.setLayoutProperty(addModuleName+'-extrusion', 'visibility', 'visible');
+    mapBuilder.map.setLayoutProperty(addModuleName+'-labels', 'visibility', 'visible');
+
+    mapBuilder.map.setLayoutProperty(delModuleName+'-geom', 'visibility', 'none');
+    mapBuilder.map.setLayoutProperty(delModuleName+'-extrusion', 'visibility', 'none');
+    mapBuilder.map.setLayoutProperty(delModuleName+'-labels', 'visibility', 'none');
+
+    
 }
 
 /* var mapBuilder = {
