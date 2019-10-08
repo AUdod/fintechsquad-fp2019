@@ -2,19 +2,24 @@
 import {getTest} from './dataApi.js'
 getTest().then( result => {console.log('getTest', result ); } );
 
+
+var mapBuilder = {};
+
 mapboxgl.accessToken = 'pk.eyJ1IjoidmVyeW4xY2UiLCJhIjoiY2pqaGdtdXRmM2h2cDN2bW1mMXFjcDR5ZCJ9.8yOftdKhiv5q1EFPhBP_Mw';
-var map = new mapboxgl.Map({
+mapBuilder.map = new mapboxgl.Map({
     container: 'map', // container id
     style: 'mapbox://styles/mapbox/light-v10', // stylesheet location
-    center: [39.729996, 43.588348], // starting position [lng, lat]
+    center: [39.727803,
+        43.578774], // starting position [lng, lat]
     zoom: 15, // starting zoom
     pitch: 40
 
 });
 
-map.on('load', function () {
+mapBuilder.map.on('load', function () {
     // Insert the layer beneath any symbol layer.
-    var layers = map.getStyle().layers;
+    console.log(mapBuilder)
+    var layers = mapBuilder.map.getStyle().layers;
 
     console.log(layers);
 
@@ -26,7 +31,7 @@ map.on('load', function () {
         }
     }
 
-    map.addLayer({
+    mapBuilder.map.addLayer({
         'id': '3d-buildings',
         'source': 'composite',
         'source-layer': 'building',
@@ -44,16 +49,16 @@ map.on('load', function () {
         }
     }, labelLayerId);
 
-    getTest().then(result =>  addLayers(map, result, "test"));
+    getTest().then(result =>  mapBuilder.addLayers(result, "test"));
 
 });
 
-function addLayers(map, source, moduleName) {
-    map.addSource(moduleName, {
+mapBuilder.addLayers = function(source, moduleName) {
+    mapBuilder.map.addSource(moduleName, {
         "type": "geojson",
         "data": source
     });
-    map.addLayer({
+    mapBuilder.map.addLayer({
         "id": moduleName + "-geom",
         "type": "fill",
         "source": moduleName,
@@ -64,7 +69,7 @@ function addLayers(map, source, moduleName) {
         /* ,
                     "filter": ["==", "$type", "Polygon"] */
     });
-    map.addLayer({
+    mapBuilder.map.addLayer({
         'id': moduleName + "-extrusion",
         'type': 'fill-extrusion',
         'source': moduleName,
@@ -74,14 +79,14 @@ function addLayers(map, source, moduleName) {
             // Get the fill-extrusion-color from the source 'color' property.
             'fill-extrusion-color': '#66e100',
             // Get fill-extrusion-height from the source 'height' property.
-            'fill-extrusion-height': 500,
+            'fill-extrusion-height': 50,
             // Get fill-extrusion-base from the source 'base_height' property.
             'fill-extrusion-base': 5,
             // Make extrusions slightly opaque for see through indoor walls.
             'fill-extrusion-opacity': 0.7
         }
     });
-    console.log( 'done')
+    console.log( this.map.getStyle().sources)
 }
 
 /* var mapBuilder = {
