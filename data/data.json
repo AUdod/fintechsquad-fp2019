@@ -1,8 +1,20 @@
-{
-  "http": {
-    "routePrefix": "api"
-  },
-  "swagger": {
-    "enabled": true
-  }
+{ "type": "FeatureCollection",
+  "features": [
+    { "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [ [43.688248, 39.429956], [43.688398, 39.429796], [43.688448, 39.429996],
+            [43.688448, 39.429996], [43.688348, 39.429696] ]
+          ]
+      },
+      "properties": {
+        "name" : "Банкомат_1",
+        "0" : "3000000",
+        "1": "400000"
+        }
+      }
+  ]
 }
+
+

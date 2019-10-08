@@ -1,7 +1,6 @@
-import data from './dataStorage.js'
-import * as everpolate from '../lib/everpolate.browserified.min.js'
-console.log('data', data);
-console.log('everpolate', everpolate);
+/* import data from './dataStorage.js' */
+import {getTest} from './dataApi.js'
+getTest().then( result => {console.log('getTest', result ); } );
 
 mapboxgl.accessToken = 'pk.eyJ1IjoidmVyeW4xY2UiLCJhIjoiY2pqaGdtdXRmM2h2cDN2bW1mMXFjcDR5ZCJ9.8yOftdKhiv5q1EFPhBP_Mw';
 var map = new mapboxgl.Map({
@@ -13,7 +12,6 @@ var map = new mapboxgl.Map({
 
 });
 
-console.log('linear', linear(1000000, [0, 15], [200000, 3600000]))
 
 map.on('load', function() {
     // Insert the layer beneath any symbol layer.
