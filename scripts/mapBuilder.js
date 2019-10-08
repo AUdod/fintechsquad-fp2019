@@ -88,7 +88,8 @@ map.on('load', function() {
                     "geometry": {
                         "type": "Polygon",
                         "coordinates": [ret]
-                    }
+                    },
+                    
                 }]
             }
         };
