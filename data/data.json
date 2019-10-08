@@ -1,6 +1,4 @@
 {
-"type": "geojson",
-"data": {
 "type": "FeatureCollection",
 "features": [{
 "type": "Feature",
@@ -48,5 +46,4 @@
 "coordinates": [-121.354465, 40.488737]
 }
 }]
-}
 }
